@@ -71,7 +71,6 @@ It is built from official MegaLinter images, but is maintained on https://github
   - [REPOSITORY_TRIVY](https://megalinter.io/latest/descriptors/repository_trivy/)
   - [REPOSITORY_TRIVY_SBOM](https://megalinter.io/latest/descriptors/repository_trivy_sbom/)
   - [REPOSITORY_TRUFFLEHOG](https://megalinter.io/latest/descriptors/repository_trufflehog/)
-  - [RUBY_RUBOCOP](https://megalinter.io/latest/descriptors/ruby_rubocop/)
   - [R_LINTR](https://megalinter.io/latest/descriptors/r_lintr/)
   - [SPELL_LYCHEE](https://megalinter.io/latest/descriptors/spell_lychee/)
   - [SPELL_MISSPELL](https://megalinter.io/latest/descriptors/spell_misspell/)
