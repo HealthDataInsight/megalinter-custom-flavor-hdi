@@ -1,16 +1,51 @@
+---
 name: "MegaLinter Custom Flavor: HDI"
 author: "Tim Gentry"
 description: "MegaLinter Custom Flavor HDI"
+inputs:
+  free-disk-space:
+    description: >-
+      Delete unused preinstalled toolchains (.NET, Android, GHC, CodeQL) and
+      Docker images from the runner first, so the MegaLinter image fits.
+      Affects later steps in the same job.
+    default: "true"
 outputs:
   has_updated_sources:
     description: "0 if no source file has been updated, 1 if source files has been updated"
+    value: ${{ steps.ml.outputs.has_updated_sources }}
+# Composite, not a Docker action: Docker action images are pulled during
+# "Set up job", before anything can free disk space for them.
 runs:
-  using: "docker"
-  # You can manually update the Docker image version here, or use the latest tag
-  image: "docker://ghcr.io/healthdatainsight/megalinter-custom-flavor-hdi/megalinter-custom-flavor:latest"
-  args:
-    - "-v"
-    - "/var/run/docker.sock:/var/run/docker.sock:rw"
+  using: "composite"
+  steps:
+    - name: Free disk space
+      if: inputs.free-disk-space == 'true'
+      shell: bash
+      run: |
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+          /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+        sudo docker image prune --all --force
+        df -h /
+
+    # Forwards GITHUB_*, RUNNER_* and CI, plus every variable the caller set
+    # with `env:` (workflow, job or step level) or $GITHUB_ENV. Passed by name
+    # with `-e NAME`, so values (e.g. GITHUB_TOKEN) are never written to disk.
+    # The workspace and RUNNER_TEMP are mounted at their host paths so
+    # GITHUB_WORKSPACE, GITHUB_EVENT_PATH and GITHUB_OUTPUT stay valid inside.
+    - name: MegaLinter
+      id: ml
+      shell: bash
+      env:
+        CALLER_ENV: ${{ toJSON(env) }}
+      run: |
+        args=()
+        while read -r name; do
+          args+=(-e "$name")
+        done < <({ compgen -e | grep -E '^(GITHUB_|RUNNER_|CI$)'; jq -r 'keys[]' <<<"$CALLER_ENV"; } | sort -u)
+        docker run --rm "${args[@]}" \
+          -v "$GITHUB_WORKSPACE:$GITHUB_WORKSPACE:rw" \
+          -v "$RUNNER_TEMP:$RUNNER_TEMP:rw" \
+          ghcr.io/healthdatainsight/megalinter-custom-flavor-hdi/megalinter-custom-flavor:latest
 branding:
   icon: "check"
   color: "green"

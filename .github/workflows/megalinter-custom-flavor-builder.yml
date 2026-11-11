@@ -22,9 +22,10 @@
 #   - docker.io/<dockerhub_repo>/<repo>:<tag> (if Docker Hub credentials are set)
 # =============================================================
 
+---
 name: Build & Push MegaLinter Custom Flavor
 
-on:
+"on":
   push:
     branches-ignore: [main]
   release:
