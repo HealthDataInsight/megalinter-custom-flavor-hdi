@@ -23,10 +23,6 @@ e.g. This includes a migration, model and controller for user authentication. I'
 
 {Including tests along with code updates is essential as it prevents merging code without tests or failing tests, which could pose risks if overlooked. It's equally important to describe how you've tested harder-to-test code, like infrastructure code, and to communicate any untested conditions or edge cases and their associated risks to the reviewer.}
 
-## Clinical safety?
-
-{Does this add or change a clinical safety hazard, such as a new module, data source, alert, or anything Maud says or shows? If so, update docs/HAZARD_LOG.md in this PR, and link any hazard issue for work it needs. If not, say "No change to hazards".}
-
 ## AI Contribution
 
 {Disclose any AI tools (e.g. GitHub Copilot, ChatGPT, Claude) used in this Pull Request, describing what they contributed. This helps reviewers understand the level of AI involvement and apply appropriate scrutiny.
