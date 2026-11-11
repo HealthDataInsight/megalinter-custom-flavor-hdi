@@ -86,6 +86,7 @@ It is built from official MegaLinter images, but is maintained on https://github
   - [TERRAFORM_TERRAGRUNT](https://megalinter.io/latest/descriptors/terraform_terragrunt/)
   - [TERRAFORM_TERRASCAN](https://megalinter.io/latest/descriptors/terraform_terrascan/)
   - [TERRAFORM_TFLINT](https://megalinter.io/latest/descriptors/terraform_tflint/)
+  - [TYPESCRIPT_ES](https://megalinter.io/latest/descriptors/typescript_eslint/)
   - [XML_XMLLINT](https://megalinter.io/latest/descriptors/xml_xmllint/)
   - [YAML_PRETTIER](https://megalinter.io/latest/descriptors/yaml_prettier/)
   - [YAML_V8R](https://megalinter.io/latest/descriptors/yaml_v8r/)
