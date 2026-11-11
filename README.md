@@ -100,7 +100,7 @@ Follow [MegaLinter installation guide](https://megalinter.io/latest/install-assi
 
 ### Action inputs
 
-- `free-disk-space` (default `"true"`): Deletes unused preinstalled toolchains (.NET, Android SDK, GHC, CodeQL) and all Docker images from the runner before pulling MegaLinter, so the image fits on a stock `ubuntu-latest` runner. **These are gone for later steps in the same job**, so set `"false"` if you need them.
+- `free-disk-space` (default `"true"`): Deletes the preinstalled .NET SDK (`/usr/share/dotnet`) from the runner before pulling MegaLinter, so the image fits on a stock `ubuntu-latest` runner. **.NET is gone for later steps in the same job**, so set `"false"` if you need it.
 
 The action is a composite action that runs the image with `docker run` (a Docker container action would pull the image before any disk space could be freed).
 
