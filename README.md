@@ -98,6 +98,23 @@ Follow [MegaLinter installation guide](https://megalinter.io/latest/install-assi
 - GitHub Action: On MegaLinter step in .github/workflows/mega-linter.yml, define `uses: HealthDataInsight/megalinter-custom-flavor-hdi@main`
 - Docker image: Replace official MegaLinter image with `ghcr.io/HealthDataInsight/megalinter-custom-flavor-hdi/megalinter-custom-flavor:latest`
 
+### Action inputs
+
+- `free-disk-space` (default `"true"`): Deletes unused preinstalled toolchains (.NET, Android SDK, GHC, CodeQL) and all Docker images from the runner before pulling MegaLinter, so the image fits on a stock `ubuntu-latest` runner. **These are gone for later steps in the same job**, so set `"false"` if you need them.
+
+The action is a composite action that runs the image with `docker run` (a Docker container action would pull the image before any disk space could be freed).
+
+### Environment variables
+
+The MegaLinter container receives:
+
+- the runner's `GITHUB_*`, `RUNNER_*` and `CI` variables
+- every variable you set with `env:` at workflow, job or step level, or via `$GITHUB_ENV` (e.g. `GITHUB_TOKEN`, `VALIDATE_ALL_CODEBASE`, `DISABLE`, `APPLY_FIXES`)
+
+Variables are passed by name (`docker run -e NAME`), so secrets are never written to disk. Other runner environment variables (e.g. `PATH`, `JAVA_HOME`) are not forwarded.
+
+The `has_updated_sources` output is available as before, e.g. `steps.ml.outputs.has_updated_sources`.
+
 ## How the flavor is generated and updated
 
 This custom flavor is automatically kept up to date with MegaLinter releases:
@@ -142,12 +159,5 @@ If you need to manually trigger a build:
 3. **Manually run the workflow**: Go to Actions > Build & Push MegaLinter Custom Flavor > Run workflow
 
 See [full Custom Flavors documentation](https://megalinter.io/beta/custom-flavors/).
-
-## How to use the custom flavor
-
-Follow [MegaLinter installation guide](https://megalinter.io/latest/install-assisted/), and replace related elements in the workflow.
-
-- **GitHub Action**: On MegaLinter step in `.github/workflows/mega-linter.yml`, define `uses: HealthDataInsight/megalinter-custom-flavor-hdi@main`
-- **Docker image**: Replace official MegaLinter image with `ghcr.io/HealthDataInsight/megalinter-custom-flavor-hdi/megalinter-custom-flavor:latest`
 
 [![MegaLinter is graciously provided by OX Security](https://raw.githubusercontent.com/oxsecurity/megalinter/main/docs/assets/images/ox-banner.png)](https://www.ox.security/?ref=megalinter)
