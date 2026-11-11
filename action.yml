@@ -5,9 +5,8 @@ description: "MegaLinter Custom Flavor HDI"
 inputs:
   free-disk-space:
     description: >-
-      Delete unused preinstalled toolchains (.NET, Android, GHC, CodeQL) and
-      Docker images from the runner first, so the MegaLinter image fits.
-      Affects later steps in the same job.
+      Delete the preinstalled .NET SDK from the runner first, so the
+      MegaLinter image fits. Affects later steps in the same job.
     default: "true"
 outputs:
   has_updated_sources:
@@ -22,9 +21,8 @@ runs:
       if: inputs.free-disk-space == 'true'
       shell: bash
       run: |
-        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
-          /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
-        sudo docker image prune --all --force
+        df -h /
+        sudo rm -rf /usr/share/dotnet
         df -h /
 
     # Forwards GITHUB_*, RUNNER_* and CI, plus every variable the caller set
